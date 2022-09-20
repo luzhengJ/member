@@ -4,30 +4,27 @@
 
 <script>
 // @ is an alias to /src
-import axios from "axios";
+// import axios from "axios";
+import request from "../utils/request.js"
 
 export default {
   name: "HomeView",
   components: {},
   created() {
-    axios({
+    request({
       url: "/dev-api/",
       method: "GET",
-    })
-      .then((response) => {
+    }).then(response => {
         console.log(response);
-      })
-      .catch((error) => {
+      }).catch(error => {
         console.log(error);
       }),
-      axios({
+      request({
         url: [process.env.VUE_APP_BASE_API1]+"/",
         method: "GET",
-      })
-        .then((response) => {
+      }).then(response => {
           console.log(response);
-        })
-        .catch((error) => {
+        }).catch(error => {
           console.log(error);
         });
   },
