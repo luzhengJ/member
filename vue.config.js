@@ -24,16 +24,16 @@ module.exports = defineConfig({
          ["^" + process.env.VUE_APP_BASE_API] : ''
         }
       },
-      [process.env.VUE_APP_BASE_API1]:{
-        // 跨域的地址
-         target:process.env.VUE_APP_SERVER_URL1,
-        //  是否开启跨域
-         changeOrigin : true,
-        //  路径重写
-        pathRewrite:{
-         ["^" + process.env.VUE_APP_BASE_API1] : ''
-        }
-      }
+      // [process.env.VUE_APP_BASE_API1]:{
+      //   // 跨域的地址
+      //    target:process.env.VUE_APP_SERVER_URL1,
+      //   //  是否开启跨域
+      //    changeOrigin : true,
+      //   //  路径重写
+      //   pathRewrite:{
+      //    ["^" + process.env.VUE_APP_BASE_API1] : ''
+      //   }
+      // }
     }
   }
 })
