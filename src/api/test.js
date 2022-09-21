@@ -1,6 +1,7 @@
 
 // 会员接口   http://vue.mengxuegu.com/pro-api/member/list/search/1/20
 // 供应商接口  http://vue.mengxuegu.com/pro-api/supplier/list/search/1/10
+// 查询接口  http://vue.mengxuegu.com/pro-api/member/10
 
 import request from "../utils/request"
 
@@ -32,10 +33,26 @@ import request from "../utils/request"
   })
  }
 
+ /**
+  * 获取查询数据列表
+  * @param {*} id 
+  * @returns 
+  */
+ const findMenber =(id)=>{
+    return request({
+      url:`/member/${id}`,
+      method:"GET",
+      data:{
+        age:1000
+      }
+    })
+ }
+
 
  export default {
   getMemberList,
-  getSupplier
+  getSupplier,
+  findMenber
 }
 
 

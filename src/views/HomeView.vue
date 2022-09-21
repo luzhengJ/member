@@ -13,13 +13,17 @@ export default {
   data () {
       return {
          page:1,
-         size:10      
+         size:10,
+         test:{
+          name:"jack"
+         }   ,
+         id:100
       }
   },
   components: {},
   created() {
     // 会员管理
-    Testapi.getMemberList( this.page, this.size ).then(response=>{
+    Testapi.getMemberList( this.page, this.size ,this.test).then(response=>{
       console.log('member=>',response);
     }).catch(error=>{
       console.log(error);
@@ -28,6 +32,13 @@ export default {
     // 供应商管理
     Testapi.getSupplier( this.page, this.size ).then(response=>{
       console.log('Supplier=>',response);
+    }).catch(error=>{
+      console.log(error);
+    })
+
+    // 查询会员
+    Testapi.findMenber(this.id).then(response=>{
+      console.log('find=>',response);
     }).catch(error=>{
       console.log(error);
     })
