@@ -29,6 +29,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   function (response) {
+    console.log('--',response);
    if(response.status < 400){
     return response.data.data
    }

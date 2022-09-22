@@ -47,8 +47,14 @@ export default {
         });
     },
     // 实现登录
-    handleLogin(){
-
+     async handleLogin(){
+         try{
+            const response = await login(this.loginForm)
+            console.log('response=>',response);
+            console.log('token=>',response.data.data.token);
+         }catch(e){
+            console.log(e.message);
+         }
     }
   },
 };
