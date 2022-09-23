@@ -10,52 +10,63 @@
           <el-input v-model="loginForm.password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" 
-          @click="handelLoginSubmit">登录</el-button>
+          <el-button type="primary" @click="handelLoginSubmit">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 <script>
+import { login, getUserInfo} from "../../api/user.js";
 export default {
   data() {
     return {
       loginForm: {
         username: "",
-        password:"",
+        password: "",
       },
-      rules:{
-        username:[
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+      rules: {
+        username: [
+          { required: true, message: "请输入账号", trigger: "blur" },
+          { min: 3, max: 5, message: "长度在 3 到 10 个字符", trigger: "blur" },
         ],
-        password:[
-             { required: true, message: '请输入密码', trigger: 'blur' },
-        ]
-      }
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+      },
     };
   },
   methods: {
     // 登录功能  表单校验
     handelLoginSubmit() {
       console.log("submit!");
-      this.$refs['form'].validate((valid) => {
-          if (!valid) return
-          console.log(123);
-          this.handleLogin()
-        });
+      this.$refs["form"].validate((valid) => {
+        if (!valid) return;
+        console.log(123);
+        this.handleLogin();
+      });
     },
     // 实现登录
-     async handleLogin(){
-         try{
-            const response = await login(this.loginForm)
-            console.log('response=>',response);
-            console.log('token=>',response.data.data.token);
-         }catch(e){
-            console.log(e.message);
-         }
-    }
+    async handleLogin() {
+      try {
+        // 调用登录接口
+        const response = await login(this.loginForm);
+        // console.log("response=>", response);
+        console.log("token=>", response.token);
+        // 讲token存到vuex以及本地
+        this.$store.dispatch("DIS_SET_TOKEN", response.token);
+
+        // 调用用户信息接口
+        const userInfo = await getUserInfo()
+        console.log('userInfo=>',userInfo);
+         // 将用户信息存到vuex以及本地
+         this.$store.dispatch("DIS_SET_USER_INFO",userInfo)
+        //  提示登录成功
+        this.$message.success('登录成功')
+        //  跳转到主页
+         this.$router.push("/")
+      } catch (e) {
+        console.log(e.message);
+      }
+    },
   },
 };
 </script>
@@ -72,11 +83,11 @@ export default {
     margin: 180px auto;
     border-radius: 20px;
     padding: 28px;
-    .login-title{
-        text-align: center;
-        font-size:24px;
-        color: #303133;
-        padding: 20px;
+    .login-title {
+      text-align: center;
+      font-size: 24px;
+      color: #303133;
+      padding: 20px;
     }
   }
 }

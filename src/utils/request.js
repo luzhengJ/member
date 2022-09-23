@@ -1,23 +1,29 @@
 // 引入axios
 import axios from "axios";
 
-import {Message} from "element-ui"
+import { Message } from "element-ui";
 
+import store from "../store/index"
 // 自定义错误信息提示内容
 const exceptionMessage = {
-  1000 : '用户名或密码发生错误',
-  2000 : 'xxx发生错误',
-  3000: ''
-}
+  1000: "用户名或密码发生错误",
+  2000: "xxx发生错误",
+  3000: "",
+};
+
+
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API,
+  // baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000,
 });
 
 // 请求拦截器
 service.interceptors.request.use(
   function (config) {
+      // 获取vuex的token
+  const token = store.getters.token
+  if(token) config.headers.authorization = "Bearer" + token
     return config;
   },
   function (error) {
@@ -29,15 +35,15 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   function (response) {
-    console.log('--',response);
-   if(response.status < 400){
-    return response.data.data
-   }
-   if(response.status===401){
-     //  TODO token的过期处理
-     return
-   }
-    _showError(response.data.code,response.data.message)
+    console.log("--", response);
+    if (response.status < 400) {
+      return response.data.data;
+    }
+    if (response.status === 401) {
+      //  TODO token的过期处理
+      return;
+    }
+    _showError(response.data.code, response.data.message);
     return response;
   },
   function (error) {
@@ -48,24 +54,25 @@ service.interceptors.response.use(
 /**
  * 错误提示
  */
-const _showError = (errorCode,message)=>{
-  let title
-  title = exceptionMessage[errorCode] || message || '发生未知错误'
-  Message.error(title) 
-}
-
+const _showError = (errorCode, message) => {
+  let title;
+  title = exceptionMessage[errorCode] || message || "发生未知错误";
+  Message.error(title);
+};
 
 /**
  * 解决不同请求方式时统一使用data来进行传参
- * @param {*} options 
- * @returns 
+ * @param {*} options
+ * @returns
  */
 const request = (options) => {
   options.method = options.method || "get";
   if (options.method.toLowerCase() === "get") {
     options.params = options.data || options.params;
-    delete options.data
+    delete options.data;
   }
+  // 解决多个代理请求的问题
+  service.defaults.baseURL = options.proxy || process.env.VUE_APP_BASE_API;
   return service(options);
 };
 
