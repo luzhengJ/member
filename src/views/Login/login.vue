@@ -11,14 +11,13 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handelLoginSubmit">登录</el-button>
-          <el-button type="primary" @click="handelLoginSubmit">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 <script>
-import { login, getUserInfo} from "../../api/user.js";
+
 export default {
   data() {
     return {
@@ -46,28 +45,39 @@ export default {
       });
     },
     // 实现登录
-    async handleLogin() {
-      try {
-        // 调用登录接口
-        const response = await login(this.loginForm);
-        // console.log("response=>", response);
-        console.log("token=>", response.token);
-        // 讲token存到vuex以及本地
-        this.$store.dispatch("DIS_SET_TOKEN", response.token);
+    async handleLogin(){
+      const token =await this.$store.dispatch("login",this.loginForm)
+      console.log("token=>",token);
+      if(!token) return
+      const userInfo = await this.$store.dispatch("handelUserInfo")
+      if(!userInfo) return
+      this.$message.success('登陆成功')
+      this.$router.push("/")
 
-        // 调用用户信息接口
-        const userInfo = await getUserInfo()
-        console.log('userInfo=>',userInfo);
-         // 将用户信息存到vuex以及本地
-         this.$store.dispatch("DIS_SET_USER_INFO",userInfo)
-        //  提示登录成功
-        this.$message.success('登录成功')
-        //  跳转到主页
-         this.$router.push("/")
-      } catch (e) {
-        console.log(e.message);
-      }
-    },
+    }
+    // 实现登录
+  //   async handleLogin() {
+  //     try {
+  //       // 调用登录接口
+  //       const response = await login(this.loginForm);
+  //       // console.log("response=>", response);
+  //       console.log("token=>", response.token);
+  //       // 讲token存到vuex以及本地
+  //       this.$store.dispatch("DIS_SET_TOKEN", response.token);
+
+  //       // 调用用户信息接口
+  //       const userInfo = await getUserInfo()
+  //       console.log('userInfo=>',userInfo);
+  //        // 将用户信息存到vuex以及本地
+  //        this.$store.dispatch("DIS_SET_USER_INFO",userInfo)
+  //       //  提示登录成功
+  //       this.$message.success('登录成功')
+  //       //  跳转到主页
+  //        this.$router.push("/")
+  //     } catch (e) {
+  //       console.log(e.message);
+  //     }
+  //   },
   },
 };
 </script>

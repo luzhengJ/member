@@ -17,9 +17,20 @@ export const login = (data = {}) => {
  * 获取用户信息
  * @returns 
  */
-export const getUserInfo =()=>{
+export const userInfo =()=>{
   return request({
     url:"/admin/getUserInfo",
     method:"GET",
+  })
+}
+
+/**
+ * 退出登录接口
+ * @returns 
+ */
+export const Logout = () =>{
+  return request({
+    url:"/admin/logout",
+    method:"POST"
   })
 }

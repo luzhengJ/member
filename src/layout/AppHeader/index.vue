@@ -12,42 +12,56 @@
 
     <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
-        {{$store.getters.userInfo.name || ""}}<i class="el-icon-arrow-down el-icon--right"></i>
+        {{ $store.getters.userInfo.name || ""
+        }}<i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="changePass" icon="el-icon-edit">修改密码</el-dropdown-item>
-        <el-dropdown-item command="LoginOut" icon="el-icon-s-fold">退出登录</el-dropdown-item>
+        <el-dropdown-item command="changePass" icon="el-icon-edit"
+          >修改密码</el-dropdown-item
+        >
+        <el-dropdown-item command="LoginOut" icon="el-icon-s-fold"
+          >退出登录</el-dropdown-item
+        >
       </el-dropdown-menu>
     </el-dropdown>
   </div>
 </template>
 <script>
 export default {
-    data () {
-        return {
-            
-        }
+  data() {
+    return {};
+  },
+  methods: {
+    handleCommand(command) {
+      console.log(command);
+      // 判断是“修改密码”还是“退出登录”
+      switch (command) {
+        case "changePass":
+          this.handleChangePass();
+          break;
+        case "LoginOut":
+          this.handleLoginOut();
+          break;
+      }
     },
-    methods: {
-        handleCommand(command){
-            console.log(command);
-            switch (command){
-                case "changePass" :
-                  this.handleChangePass()
-                  break
-                case "LoginOut" :
-                   this. handleLoginOut()
-                   break
-            }
-        },
-        handleChangePass(){
-            alert("修改密码")
-        },
-        handleLoginOut(){
-            alert("退出成功")
-        }
-    }
-}
+    // 修改密码
+    handleChangePass() {
+      alert("修改密码");
+    },
+    // 退出登录
+    async handleLoginOut() {
+      try {
+        const response = await this.$store.dispatch("handleLogout");
+        setTimeout(()=>{
+         this.$router.push("/login");
+        },100)
+        this.$message.success('退出成功')
+      } catch (e) {
+        console.log(e.message);
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -66,9 +80,9 @@ export default {
   font-size: 16px;
   vertical-align: middle;
 }
-.el-dropdown{
-    float: right;
-    color: #fff;
-    margin-right: 30px;
+.el-dropdown {
+  float: right;
+  color: #fff;
+  margin-right: 30px;
 }
 </style>
