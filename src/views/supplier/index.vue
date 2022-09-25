@@ -1,5 +1,5 @@
 <template>
-    <div class="supplier">
+    <div class="mt-2">
         供应商管理
     </div>
 </template>
